@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Primes with Pthreads</title>
+</head>
+<body>
+  <h1>Prime Numbers</h1>
+  <button id="startBtn">Start</button>
+  <div id="output"></div>
+
+  <script src="./build/primes.js"></script>
+  <script>
+    const output = document.getElementById("output");
+    const startBtn = document.getElementById("startBtn");
+
+    PrimesModule().then(Module => {
+      console.log("[JS] Module initialized");
+
+      startBtn.addEventListener("click", () => {
+        output.innerHTML = "Running...<br>";
+        Module.runPrimes(5000, (primes) => {
+          output.innerHTML = "Found primes:<br>" + primes.join(", ");
+        });
+      });
+    });
+  </script>
+</body>
+</html>
