@@ -6,13 +6,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # You can pick which source file to use:
-#   primes_stream.cpp  → Sieve of Eratosthenes (streamed)
-#   primes_naive.cpp   → Naïve trial division (streamed)
-#set(SRC primes_stream.cpp)
-#set(SRC primes_naive.cpp)
-#set(SRC primes_emscripten.cpp)
-#set(SRC primes_post_message.cpp)
-set(SRC primes_mt.cpp)
+#set(SRC primes_mt.cpp)
+set(SRC primes_non_blocking.cpp)
 
 # Output will be primes.js / primes.wasm
 set(TARGET primes)
