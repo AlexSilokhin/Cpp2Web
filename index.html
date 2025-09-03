@@ -6,6 +6,8 @@
 </head>
 <body>
   <h1>Prime Numbers</h1>
+  <p>Maximum Number: 500</p>
+  <p>Number of Threads: 4</p>
   <button id="startBtn">Start</button>
   <div id="output"></div>
 
@@ -17,10 +19,39 @@
     PrimesModule().then(Module => {
       console.log("[JS] Module initialized");
 
+      // Initialize the prime numbers collection on the Module
+      Module.primeNumbers = [];
+      Module.threadsFinished = 0;
+      Module.totalThreads = 4;
+
+      // Function to handle when a thread finishes
+      Module.onThreadFinished = function(threadId, primesFound) {
+        console.log(`[JS] Thread ${threadId} finished, found ${primesFound} primes`);
+        Module.threadsFinished++;
+        
+        // Update UI progressively
+        output.innerHTML = `Running... Thread ${threadId} done (${primesFound} primes found)<br>
+                           Progress: ${Module.threadsFinished}/${Module.totalThreads} threads completed<br>
+                           Total primes so far: ${Module.primeNumbers.length}`;
+        
+        // If all threads are done, show final results
+        if (Module.threadsFinished === Module.totalThreads) {
+          output.innerHTML = `Found ${Module.primeNumbers.length} primes:<br>${Module.primeNumbers.join(", ")}`;
+          console.log("[JS] All threads completed!");
+        }
+      };
+
       startBtn.addEventListener("click", () => {
-        output.innerHTML = "Running...<br>";
-        Module.runPrimes(5000, (primes) => {
-          output.innerHTML = "Found primes:<br>" + primes.join(", ");
+        // Reset for new calculation
+        Module.primeNumbers = [];
+        Module.threadsFinished = 0;
+
+        output.innerHTML = "Starting calculation...<br>";
+        
+        // Start the non-blocking calculation
+        Module.runPrimesAsyncNonBlocking(5000, Module.totalThreads, (primes) => {
+          // This callback might not be used with the new approach
+          console.log("[JS] Calculation completed via callback");
         });
       });
     });
